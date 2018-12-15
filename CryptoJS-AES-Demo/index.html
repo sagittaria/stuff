@@ -1,0 +1,40 @@
+<script src='./rollups/aes.js'></script>
+<script src='./components/enc-base64.js'></script>
+<script src='./components/mode-ecb.js'></script>
+<script>
+  var text ='{ExternalTicketId:"External100011614", PlateNumber:"粤BDY032"}'
+  var key = CryptoJS.enc.Utf8.parse("PILIPALAPILIPALAPILIPALAPILIPALA")
+  // key必须CryptoJS.enc.Utf8.parse，我不知道为什么
+
+  var encrypted = CryptoJS.AES.encrypt(
+    text , key, {mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7})
+
+  // 将密文转为Base64的字符串
+  var base64Str = CryptoJS.enc.Base64.stringify(encrypted.ciphertext)
+  console.log('base64Str -> ' + base64Str);
+
+  // 解密
+  var decrypted = CryptoJS.AES.decrypt(encrypted, key, {mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7})
+  console.log(CryptoJS.enc.Utf8.stringify(decrypted))
+
+
+  var final = CryptoJS.enc.Utf8.parse('{Code:"HLPC",Data:"dPn2vEhU+wBSOMF14O+DWPRkqlaqkGPEV/Ab/VbozPwytrfyW8hDeBMZlO2EZoQGUMGMFW2v4/gN6KgIJ5PGVw=="}')
+  // 必须CryptoJS.enc.Utf8.parse，不然下一行输出的还是未经base64化的原文
+  console.log('final -> ' + final.toString(CryptoJS.enc.Base64))
+
+  var params = 'e0NvZGU6IkhMUEMiLERhdGE6ImRQbjJ2RWhVK3dCU09NRjE0TytEV1BSa3FsYXFrR1BFVi9BYi9WYm96UHd5dHJmeVc4aERlQk1abE8yRVpvUUdVTUdNRlcydjQvZ042S2dJSjVQR1Z3PT0ifQ=='
+
+  // window.open('http://www.elanelink.com/Embedded/TruckTrace?param='+params)
+
+
+  /*
+    
+    关键：key要用CryptoJS.enc.Utf8.parse()套起来！
+
+    参考：
+    1. https://www.jianshu.com/p/8b8c53907f31
+    2. https://www.cnblogs.com/yuri2016/p/6877202.html
+  */
+
+
+</script>
